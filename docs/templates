@@ -1,0 +1,16 @@
+C:常量
+$变量
+
+循环
+foreach as $k => $v
+/foreach
+
+if
+/if
+
+for $i=0; $i < 10;$++
+/for
+
+需要显示返回值的函数
+P:function
+其他函数直接调用
