@@ -2,7 +2,7 @@
 /**
  * 程序配置文件
  */
-!defined('WHBLOG_ROOT') && exit('access deined!');
+!defined('LESS_ROOT') && exit('access deined!');
 defined('CONFIG_INCLUDE') && exit('Configruge Duplicates!');
 define('CONFIG_INCLUDE', true);
 

@@ -1,5 +1,5 @@
 <?php
-!defined('WHBLOG_ROOT') && exit('access deined!');
+!defined('LESS_ROOT') && exit('access deined!');
 header("Content-type:text/html;charset=utf-8");
 header("Cache-Control:no-cache,must-revalidate");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
