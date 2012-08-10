@@ -11,5 +11,11 @@ class sys_config
 		$config = isset($config[$key]) ? $GLOBALS['config'][$key] : '';
 		return $config;
 	}
+
+    static function Set($key, $value)
+	{
+		$config = $GLOBALS['config'];
+		$GLOBALS['config'][$key] = $value;
+	}
 }
 ?>
