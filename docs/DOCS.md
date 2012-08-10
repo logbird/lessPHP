@@ -16,6 +16,29 @@
 |-- index.php
 ```
 
+2. 在controller建立一个名字为testController.php的文件(所有的controller文件必须已Controller为后缀，Controller可以在配置文件里配置),文件内容如下：
+
+```
+<?php
+class indexController extends My_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
+	public function indexAction()
+	{
+	}
+}
+?>
+```
+**注意 classname 跟文件名必须相同**
+
+3. 
+
+
+
 内置模版引擎语法
 -------
 
