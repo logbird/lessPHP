@@ -2,28 +2,19 @@
 -------
 1. 下载 框架代码 解压到 网站跟目录目录机构如下
 
-> |-- /
-
-> |-- app
-
->    |-- controller
-
->    |-- extends
-
->    |-- files
-
->    |-- plugin
-
->    |-- config.php
-
-> |-- frame
-
-> |-- .htaccess
-
-> |-- README.md
-
-> |-- index.php
-
+```
+|-- /
+|-- app
+   |-- controller
+   |-- extends
+   |-- files
+   |-- plugin
+   |-- config.php
+|-- frame
+|-- .htaccess
+|-- README.md
+|-- index.php
+```
 
 内置模版引擎语法
 -------
