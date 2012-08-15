@@ -21,7 +21,7 @@
 
 	```
 	<?php
-	class indexController extends My_Controller
+	class testController extends My_Controller
 	{
 		public function __construct()
 		{
@@ -30,6 +30,8 @@
 
 		public function indexAction()
 		{
+			$data['show'] = "This Is a lessPHP Program!";
+			$this->display('test.html', $data);
 		}
 	}
 	?>
@@ -45,11 +47,13 @@
 			<title>第一个lessPHP程序</title>
 		</head>
 		<body>
+			<p><!--{$show}--></p>
 			<p>第一个lessPHP程序</p>
 		</body>
 	</html>
 	```
-
+4. 将app/files/templates_c 的权限设置为 可写 777
+5. 运行 您的程序 http://域名/test
 
 
 内置模版引擎语法
