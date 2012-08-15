@@ -38,11 +38,12 @@ $config['routes'] = array(
 
 /**
  * 插件注册
- * sys_loader::register($className, $path, $autoLoad = true)
- */
-sys_loader::register('Smarty', 'Smarty/Smarty.class.php');
-
-
+ * className => array(path, lazyLoad) 
+ * lazyLoad: true 延迟加载 false 立即加载插件 如果文件为函数 请使用立即加载 默认延迟加载
+ */ 
+$config['plugin'] = array(
+    'Smarty' => array('Smarty/Smarty.class.php', false),
+);
 
 //加密密匙
 $config['encrypt'] = 'zjhsrsdfcbtrwepd';
@@ -61,6 +62,7 @@ $config['database']['errReport'] = true;			    //mysql 是否显示sql语句错�
 
 //缓存设置
 $config['cache']['options'] = 'file';					//mem 为 使用memcache作为缓存 file 为文件缓存
+
 
 
 ?>

@@ -1,6 +1,13 @@
 <?php
 /**
- * controller控制类
+ * 控制器抽象类
+ * 
+ * @abstract
+ * @package 
+ * @version $id$
+ * @copyright 1997-2005 The PHP Group
+ * @author Tobias Schlitt <toby@php.net> 
+ * @license PHP Version 3.0 {@link http://www.php.net/license/3_0.txt}
  */
 abstract class sys_controller
 {
@@ -9,26 +16,8 @@ abstract class sys_controller
 	function __construct($tmpl = '')
 	{
 		//开启input过滤
-		$this->request = new sys_request();
+		$this->input = new sys_request();
 		$this->backurl = isset($_SERVER["HTTP_REFERER"])?$_SERVER["HTTP_REFERER"]:'/';
-	}
-
-	//跳转页面
-	function direct($url)
-	{
-		commonPlugin::Direct($url);
-	}
-
-	/**
-	 * 显示错误信息
-	 * @param msg string 错误提示信息
-	 * @param url string 跳转页面的链接
-	 * @param msg string 自动跳转时间 如果是0则为不自动跳转
-	 **/
-	function showMsg($msg = '出错啦。。。', $url = '', $second = 0)
-	{
-		$url = empty($url)? $this->backurl :$url;
-		toolsLIB::Msg($msg, $url, $second);
 	}
 
 	/**
@@ -36,7 +25,7 @@ abstract class sys_controller
 	 */
 	function get($var = '', $filter = array())
 	{
-		return $this->request->getVar($var, $filter);
+		return $this->input->getVar($var, $filter);
 	}
 
 	/**
@@ -44,7 +33,7 @@ abstract class sys_controller
 	 */
 	function post($var = '', $filter = array())
 	{
-		return $this->request->postVar($var, $filter);;
+		return $this->input->postVar($var, $filter);;
 	}
 
 	/**

@@ -1,41 +1,54 @@
-快速开发
+快速开始
 -------
 1. 下载 框架代码 解压到 网站跟目录目录机构如下
 
-```
-|-- /
-|-- app
-   |-- controller
-   |-- extends
-   |-- files
-   |-- plugin
-   |-- config.php
-|-- frame
-|-- .htaccess
-|-- README.md
-|-- index.php
-```
+	```
+	|-- /
+	|-- app
+	   |-- controller
+	   |-- extends
+	   |-- files
+	   |-- plugin
+	   |-- config.php
+	|-- frame
+	|-- .htaccess
+	|-- README.md
+	|-- index.php
+	```
+	`app` 目录为应用程序目录，`frame` 目录为框架目录，`index.php` 为入口文件
 
-2. 在controller建立一个名字为testController.php的文件(所有的controller文件必须已Controller为后缀，Controller可以在配置文件里配置),文件内容如下：
+2. 在app/controller建立一个名字为testController.php的文件(所有的controller文件必须以Controller为后缀),文件内容如下：
 
-```
-<?php
-class indexController extends My_Controller
-{
-	public function __construct()
+	```
+	<?php
+	class indexController extends My_Controller
 	{
-		parent::__construct();
-	}
+		public function __construct()
+		{
+			parent::__construct();
+		}
 
-	public function indexAction()
-	{
+		public function indexAction()
+		{
+		}
 	}
-}
-?>
-```
-**注意 classname 跟文件名必须相同**
+	?>
+	```
+	**注意 classname 跟文件名必须相同**
 
-3. 
+3. 在app/templates/default(模版目录可以在config中配置) 建立一个名字为 test.html 的文件,文件内容如下：
+	```
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+			<title>第一个lessPHP程序</title>
+		</head>
+		<body>
+			<p>第一个lessPHP程序</p>
+		</body>
+	</html>
+	```
 
 
 
@@ -46,19 +59,19 @@ class indexController extends My_Controller
 
 1. 获取常量
 
-```
+	```
 	<!--{C:常量名}-->
-```
+	```
 
 2. 获取变量
 
-```
+	```
 	<!--{$变量名}-->
-```
+	```
 
 3. 循环
 
-```
+	```
 	<!--{foreach as $k => $v}-->
 		循环体
 	<!--{/foreach}-->
@@ -66,19 +79,19 @@ class indexController extends My_Controller
 	<!--{for $i=0; $i < 10;$++}-->
 		循环体
 	<!--{/for}-->
-```
+	```
 
 4. 调用函数
 
-```
+	```
 	<!--{P:函数名}-->
-```
+	```
 
 5. if语句
 
-```
+	```
 	<!--{if 表达式}-->
 	<!--{/if}-->
-```
+	```
 
 
