@@ -54,6 +54,111 @@
 <li>使用 runtime 方式 缓存类库</li>
 <li>IMVC 的规划以及实现 在M 与 C之间增加I(Interface)层</li>
 <li>LIB库的整理</li>
+</ol><h1>框架文档</h1>
+
+<h2>快速开始</h2>
+
+<ol>
+<li>
+<p>下载 框架代码 解压到 网站跟目录目录机构如下</p>
+
+<pre><code>|-- /
+|-- app
+   |-- controller
+   |-- extends
+   |-- files
+   |-- plugin
+   |-- config.php
+|-- frame
+|-- .htaccess
+|-- README.md
+|-- index.php
+</code></pre>
+
+<p><code>app</code> 目录为应用程序目录，<code>frame</code> 目录为框架目录，<code>index.php</code> 为入口文件</p>
+</li>
+<li>
+<p>在app/controller建立一个名字为testController.php的文件(所有的controller文件必须以Controller为后缀),文件内容如下：</p>
+
+<pre><code>&lt;?php
+class testController extends My_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function indexAction()
+    {
+        $data['show'] = "This Is a lessPHP Program!";
+        $this-&gt;display('test.html', $data);
+    }
+}
+?&gt;
+</code></pre>
+
+<p><strong>注意 classname 跟文件名必须相同</strong></p>
+</li>
+<li>
+<p>在app/templates/default(模版目录可以在config中配置) 建立一个名字为 test.html 的文件,文件内容如下：</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;
+        &lt;title&gt;第一个lessPHP程序&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;p&gt;&lt;!--{$show}--&gt;&lt;/p&gt;
+        &lt;p&gt;第一个lessPHP程序&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+</li>
+<li><p>将app/files/templates_c 的权限设置为 可写 777</p></li>
+<li><p>运行 您的程序 http://域名/test</p></li>
+</ol><h2>内置模版引擎语法</h2>
+
+<p><code>&lt;!--{ 语法区域 }--&gt;</code></p>
+
+<ol>
+<li>
+<p>获取常量</p>
+
+<pre><code>&lt;!--{C:常量名}--&gt;
+</code></pre>
+</li>
+<li>
+<p>获取变量</p>
+
+<pre><code>&lt;!--{$变量名}--&gt;
+</code></pre>
+</li>
+<li>
+<p>循环</p>
+
+<pre><code>&lt;!--{foreach as $k =&gt; $v}--&gt;
+    循环体
+&lt;!--{/foreach}--&gt;
+
+&lt;!--{for $i=0; $i &lt; 10;$++}--&gt;
+    循环体
+&lt;!--{/for}--&gt;
+</code></pre>
+</li>
+<li>
+<p>调用函数</p>
+
+<pre><code>&lt;!--{P:函数名}--&gt;
+</code></pre>
+</li>
+<li>
+<p>if语句</p>
+
+<pre><code>&lt;!--{if 表达式}--&gt;
+&lt;!--{/if}--&gt;
+</code></pre>
+</li>
 </ol>
         </section>
 
