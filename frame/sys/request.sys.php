@@ -72,7 +72,10 @@ class sys_request
 			'get' => $this->filter($_GET),
 			'post'=> $this->filter($_POST),
 		);
-		$_SERVER['QUERY_STRING'] = str_replace("&amp;", '&', htmlspecialchars(urldecode($_SERVER['QUERY_STRING']), ENT_QUOTES));
+		if(isset($_SERVER['QUERY_STRING']))
+		{
+			$_SERVER['QUERY_STRING'] = str_replace("&amp;", '&', htmlspecialchars(urldecode($_SERVER['QUERY_STRING']), ENT_QUOTES));
+		}
 	}
 
 	/**

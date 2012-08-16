@@ -117,7 +117,7 @@ class sys_router
 		{
             if(isset($_SERVER['argv']))
 			{
-                $path = $_SERVER['PHP_SELF'] .'?'. $_SERVER['argv'][0];
+                $path = $_SERVER['PHP_SELF'];
             }else
 			{
                 $path = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
@@ -135,7 +135,7 @@ class sys_router
         		$path = @iconv('GBK', 'UTF-8', @iconv('UTF-8', 'GBK', $path)) == $path ? $path : @iconv('GBK', 'UTF-8', $path);
         	}
         }
-        //for ie6 header location
+        //删除锚点
         $r = explode('#', $path, 2);
         $path = $r[0];
         //for iis6

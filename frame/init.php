@@ -52,10 +52,16 @@ function exceptionHanddle($errno, $errstr)
 
 //**********************************定义路径******************************************
 //虚拟根目录
-define('ROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
+define('VROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 
 //站点URL
-define('URL', "http://".$_SERVER['SERVER_NAME'].ROOT);
+if(isset($_SERVER['SERVER_NAME']) && $argc <= 0)
+{
+	define('URL', "http://".$_SERVER['SERVER_NAME'].VROOT);
+}else
+{
+	define('URL', LESS_ROOT. VROOT);
+}
 
 //用户 资源URL 路径
 define('REC', URL . trim($_APP_PATH, '/') . '/' . trim(sys_config::Get('resource'), '/') . '/');
