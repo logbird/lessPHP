@@ -63,19 +63,28 @@
 1. 首先建立数据库，和表结构
 	```
 	CREATE TABLE `message` (
+
   	`id` int(11) NOT NULL auto_increment,
+
 	  `nickname` varchar(50) collate utf8_unicode_ci NOT NULL COMMENT '昵称',
+
 	  `content` varchar(200) collate utf8_unicode_ci NOT NULL COMMENT '内容',
+
 	  `parentid` int(11) NOT NULL default '0' COMMENT '回复id',
+
 	  `createtime` int(11) NOT NULL COMMENT '创建时间',
+
 	  `ip` varchar(15) collate utf8_unicode_ci NOT NULL COMMENT '发表IP地址',
+
 	  `status` tinyint(4) NOT NULL default '1' COMMENT '状态 1正常 0 审核 -1删除',
+
 	  PRIMARY KEY  (`id`)
+
 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='留言板' AUTO_INCREMENT=1 ;
 	```
 2. 打开 `app` 目录下的 `config.php` 文件(如果不存在，请复制 `frame` 框架目录下的`config_default.php` 到 app目录下，并更名为 `config.php` )，修改 `$config['database']['master']` 数组，配置您的数据库信息。
 
-3. 进入 `app/model` 建立 messageModel.php 文件
+3. 进入 `app/model` 建立 messageModel.php 文件, 
 
 内置模版引擎语法
 -------
