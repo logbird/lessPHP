@@ -3,35 +3,32 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+
     <title>lessPHP by logbird</title>
   </head>
 
   <body>
-    <div id="container">
-      <div class="inner">
 
-        <header>
-          <h1>lessPHP</h1>
-          <h2>A Tiny PHP Framework</h2>
-        </header>
+    <header>
+      <div class="container">
+        <h1>lessPHP</h1>
+        <h2>A Tiny PHP Framework</h2>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/logbird/lessPHP/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/logbird/lessPHP/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/logbird/lessPHP" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        <section id="downloads">
+          <a href="https://github.com/logbird/lessPHP/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/logbird/lessPHP/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/logbird/lessPHP" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
         </section>
+      </div>
+    </header>
 
-        <hr>
-
-        <section id="main_content">
-          <h1>简介</h1>
+    <div class="container">
+      <section id="main_content">
+        <h2>简介</h2>
 
 <p>lessPHP是一个基于MVC模型构建的PHP5框架，它的主要特点就是轻量级、扩展性高、入手简单，哪怕是PHP新手都可以很快的进行开发。</p>
 
@@ -47,128 +44,87 @@
 <li>使用Exception 异常处理机制</li>
 <li>框架配置灵活，你可以按照自己想法去规划目录结构，只需要修改一下配置文件</li>
 <li>可以通过配置文件自由的开启关闭一些功能</li>
+<li>兼容CLI 模式的访问（未完全测试）</li>
+<li>兼容Apache IIS Nginx 多种服务器软件</li>
 </ol><p><strong>正在完善的功能</strong></p>
 
 <ol>
-<li>CLI模式的兼容</li>
+<li>
 <li>使用 runtime 方式 缓存类库</li>
 <li>IMVC 的规划以及实现 在M 与 C之间增加I(Interface)层</li>
 <li>LIB库的整理</li>
-</ol><h1>框架文档</h1>
+</ol><h2>框架手册索引</h2>
 
-<h2>快速开始</h2>
+<p><em>快速开始</em></p>
 
-<ol>
-<li>
-<p>下载 框架代码 解压到 网站跟目录目录机构如下</p>
+<blockquote>
+<p>创建一个可以输出内容的Controller文档</p>
+</blockquote>
 
-<pre><code>|-- /
-|-- app
-   |-- controller
-   |-- extends
-   |-- files
-   |-- plugin
-   |-- config.php
-|-- frame
-|-- .htaccess
-|-- README.md
-|-- index.php
-</code></pre>
+<p><em>进阶使用</em></p>
 
-<p><code>app</code> 目录为应用程序目录，<code>frame</code> 目录为框架目录，<code>index.php</code> 为入口文件</p>
-</li>
-<li>
-<p>在app/controller建立一个名字为testController.php的文件(所有的controller文件必须以Controller为后缀),文件内容如下：</p>
+<blockquote>
+<p>加入 Model 的使用，配合MySQL 建立一个 留言本程序</p>
+</blockquote>
 
-<pre><code>&lt;?php
-class testController extends My_Controller
-{
-    public function __construct()
-    {
-        parent::__construct();
-    }
+<p><em>高级使用</em></p>
 
-    public function indexAction()
-    {
-        $data['show'] = "This Is a lessPHP Program!";
-        $this-&gt;display('test.html', $data);
-    }
-}
-?&gt;
-</code></pre>
+<blockquote>
+<p>教你定义 自己的 app</p>
+</blockquote>
 
-<p><strong>注意 classname 跟文件名必须相同</strong></p>
-</li>
-<li>
-<p>在app/templates/default(模版目录可以在config中配置) 建立一个名字为 test.html 的文件,文件内容如下：</p>
+<p><em>核心功能</em></p>
 
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;
-        &lt;title&gt;第一个lessPHP程序&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;p&gt;&lt;!--{$show}--&gt;&lt;/p&gt;
-        &lt;p&gt;第一个lessPHP程序&lt;/p&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-</li>
-<li><p>将app/files/templates_c 的权限设置为 可写 777</p></li>
-<li><p>运行 您的程序 http://域名/test</p></li>
-</ol><h2>内置模版引擎语法</h2>
+<blockquote>
+<p>Controller</p>
 
-<p><code>&lt;!--{ 语法区域 }--&gt;</code></p>
+<p>Model</p>
 
-<ol>
-<li>
-<p>获取常量</p>
+<p>Xss</p>
 
-<pre><code>&lt;!--{C:常量名}--&gt;
-</code></pre>
-</li>
-<li>
-<p>获取变量</p>
+<p>配置文件</p>
 
-<pre><code>&lt;!--{$变量名}--&gt;
-</code></pre>
-</li>
-<li>
-<p>循环</p>
+<p>插件机制</p>
 
-<pre><code>&lt;!--{foreach as $k =&gt; $v}--&gt;
-    循环体
-&lt;!--{/foreach}--&gt;
+<p>autoload机制</p>
 
-&lt;!--{for $i=0; $i &lt; 10;$++}--&gt;
-    循环体
-&lt;!--{/for}--&gt;
-</code></pre>
-</li>
-<li>
-<p>调用函数</p>
+<p>CLI模式</p>
 
-<pre><code>&lt;!--{P:函数名}--&gt;
-</code></pre>
-</li>
-<li>
-<p>if语句</p>
+<p>路由及自定义Url</p>
 
-<pre><code>&lt;!--{if 表达式}--&gt;
-&lt;!--{/if}--&gt;
-</code></pre>
-</li>
-</ol>
-        </section>
+<p>多层继承</p>
 
-        <footer>
-          lessPHP is maintained by <a href="https://github.com/logbird">logbird</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
+<p>内置模版引擎</p>
 
-        
-      </div>
+<p>异常处理</p>
+</blockquote>
+
+<p><em>常用类库</em></p>
+
+<blockquote>
+<p>图片处理</p>
+
+<p>文件上传</p>
+
+<p>http请求</p>
+
+<p>验证类</p>
+
+<p>xml操作类</p>
+
+<p>常用函数类（考虑重新规划为函数文件集合）</p>
+</blockquote>
+
+<p>使用技巧*</p>
+
+<blockquote>
+<p>配置文件的管理</p>
+
+<p>多语言国际化的实现</p>
+</blockquote>
+      </section>
     </div>
+
+    
   </body>
 </html>
