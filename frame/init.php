@@ -55,7 +55,7 @@ function exceptionHanddle($errno, $errstr)
 define('VROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 
 //站点URL
-if(isset($_SERVER['SERVER_NAME']) && $argc <= 0)
+if(isset($_SERVER['SERVER_NAME']) && !isset($argc))
 {
 	define('URL', "http://".$_SERVER['SERVER_NAME'].VROOT);
 }else

@@ -27,6 +27,10 @@ $config['action_def'] = 'index';
 //运行模式 dev 为开发模式 上线请设置为 online
 $config['runMode'] = 'dev';
 
+//是否开启 错误处理机制
+$config['errHandle'] = false;
+
+
 /**
  * 路由配置，手动配置rewrite 自定义路径
  * key 为正则表达式 value 所执行的真是url,正则表达式不要加开始结束符
@@ -45,11 +49,6 @@ $config['plugin'] = array(
     'Smarty' => array('Smarty/Smarty.class.php', false),
 );
 
-//加密密匙
-$config['encrypt'] = 'zjhsrsdfcbtrwepd';
-//是否开启 错误处理机制
-$config['errHandle'] = false;
-
 //mysql设置
 $config['database']['master']['host'] = 'localhost';    //mysql 主机
 $config['database']['master']['dbname'] = 'slmei';	    //mysql 数据库名
@@ -59,10 +58,6 @@ $config['database']['master']['encode'] = 'utf8';		//mysql 编码
 $config['database']['master']['prifix'] = '';			//mysql 表前缀
 $config['database']['debug'] = false;			        //mysql 是否开始调试模式
 $config['database']['errReport'] = true;			    //mysql 是否显示sql语句错误
-
-//缓存设置
-$config['cache']['options'] = 'file';					//mem 为 使用memcache作为缓存 file 为文件缓存
-
 
 
 ?>
