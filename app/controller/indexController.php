@@ -8,7 +8,7 @@ class indexController extends My_Controller
 
 	public function indexAction()
 	{
-		echo URL;
+		echo 'indexController.php';
 	}
 }
 

@@ -117,7 +117,7 @@ class sys_router
 		{
             if(isset($_SERVER['argv']))
 			{
-                $path = $_SERVER['PHP_SELF'];
+                $path = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : $_SERVER['PHP_SELF'];
             }else
 			{
                 $path = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
