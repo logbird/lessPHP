@@ -19,6 +19,11 @@ class My_Controller extends sys_controller
 		$this->tpl->display($tmpl);
 	}
 
+    public function assign($args, $value)
+    {
+        $this->tpl->assign($args, $value);
+    }
+
 	//获取模版对象
 	public function getTpl()
 	{

@@ -51,7 +51,7 @@ $config['plugin'] = array(
 
 //mysql设置
 $config['database']['master']['host'] = 'localhost';    //mysql 主机
-$config['database']['master']['dbname'] = 'slmei';	    //mysql 数据库名
+$config['database']['master']['dbname'] = 'testMsg';	    //mysql 数据库名
 $config['database']['master']['uname'] = 'root';		//mysql 用户名
 $config['database']['master']['upwd'] = '123';			//mysql 密码
 $config['database']['master']['encode'] = 'utf8';		//mysql 编码

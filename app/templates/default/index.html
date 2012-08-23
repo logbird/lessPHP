@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>LessPHP留言版</title>
+</head>
+<body>
+    <div>
+        <ul>
+        <!--{foreach item = i from = $list}-->
+            <li>
+                <div>
+                    <strong><!--{$i.nickname}--></strong>: <em style = 'font-size:12px;'><!--{$i.content}--></em>
+                </div>
+            </li>
+        <!--{/foreach}-->
+        </ul>
+    </div>
+    <div>
+        <form action = '/index/add' method = 'post'>
+        <table>
+            <tr>
+                <td>昵称:</td><td><input type="text" name = "nickname" /></td>
+            </tr>
+            <tr>
+                <td>内容:</td><td><textarea name = 'content'></textarea></td>
+            </tr>
+            <tr>
+                <td colspan = 2><input type = 'submit' value = '提交'></td>
+            </tr>
+        </table>
+        </form>
+    </div>
+</body>
+
+<script>
+</script>
+</html>
