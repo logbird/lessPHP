@@ -3,14 +3,61 @@
 <head>
 <meta charset="utf-8" />
 <title>LessPHP留言版</title>
+<style>
+/*css reset*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre, 
+form,fieldset,input,textarea,p,blockquote,th,td { 
+    padding: 0; 
+    margin: 0; 
+} 
+table { 
+    border-collapse: collapse; 
+    border-spacing: 0; 
+} 
+fieldset,img { 
+    border: 0; 
+} 
+address,caption,cite,code,dfn,em,strong,th,var { 
+    font-weight: normal; 
+    font-style: normal; 
+} 
+ol,ul { 
+    list-style: none; 
+} 
+caption,th { 
+    text-align: left; 
+} 
+h1,h2,h3,h4,h5,h6 { 
+    font-weight: normal; 
+    font-size: 100%; 
+} 
+q:before,q:after { 
+    content:”; 
+} 
+abbr,acronym {
+    border: 0; 
+}
+/*全局设置*/
+body {
+    background-color:#F7F7F7;
+    font-family: Arial;
+    font-size: 12px;
+    line-height:150%;
+}
+a:visited {color:#666666;font-family:Helvetica;font-size:13px;}
+a {color:#FF4F73;text-decoration:none;}
+div {margin:3px;}
+</style>
 </head>
 <body>
+<div style = 'width:600px;margin:0 auto;'>
     <div>
         <ul>
         <!--{foreach item = i from = $list}-->
             <li>
                 <div>
-                    <strong><!--{$i.nickname}--></strong>: <em style = 'font-size:12px;'><!--{$i.content}--></em>
+                    <strong style = 'font-weight:bold'>[<!--{$i.nickname}-->]</strong>: 
+                    <p style = 'margin-left:25px;'><!--{$i.content}--></p>
                 </div>
             </li>
         <!--{/foreach}-->
@@ -31,6 +78,7 @@
         </table>
         </form>
     </div>
+</div>
 </body>
 
 <script>
