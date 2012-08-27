@@ -84,7 +84,91 @@
 	```
 2. 打开 `app` 目录下的 `config.php` 文件(如果不存在，请复制 `frame` 框架目录下的`config_default.php` 到 app目录下，并更名为 `config.php` )，修改 `$config['database']['master']` 数组，配置您的数据库信息。
 
-3. 进入 `app/model` 建立 messageModel.php 文件, 
+3. 进入 `app/model` 建立 messageModel.php 文件,将以下代码写入
+
+	```
+	<?PHP
+	class messageModel extends sys_model
+	{
+
+		private $_table = 'message';
+
+		public function __construct()
+		{   
+		    parent::__construct();
+		}   
+
+		/** 
+		 * 分页获取留言列表
+		 *
+		 * @param mixed $page 页数
+		 * @param mixed $count 数量
+		 * @access public
+		 * @return array
+		 */
+		public function getList($page, $count = 10) 
+		{   
+		    $page = $page > 0 ? $page - 1 : 0;
+		    $sql = "SELECT * FROM ".$this->_table . " LIMIT {$page}, {$count}";
+		    return $this->db()->getAll($sql);
+		}   
+
+		/** 
+		 * 增加留言
+		 * 
+		 * @param mixed $nickname 昵称
+		 * @param mixed $content 内容
+		 * @access public
+		 * @return int
+		 */
+		public function add($nickname, $content)
+		{   
+		    $args = array();
+		    $args['nickname'] = $nickname;
+		    $args['content'] = $content;
+		    $args['createtime'] = time();
+		    $args['ip'] = httpLIB::getIp();
+		    $args['status'] = 1;
+		    return $this->db()->add($args, $this->_table);
+		}   
+	}
+	```
+> messageModel 类名字必须与model的文件名称相同，文件继承自sys_model
+
+4. 进入 `app/Controller` 新建indexController.php文件,内容如下
+
+	```
+	<div>
+		<ul>
+		<!--{foreach item = i from = $list}-->
+		    <li>
+		        <div>
+		            <strong style = 'font-weight:bold'>[<!--{$i.nickname}-->]</strong>: 
+		            <p style = 'margin-left:25px;'><!--{$i.content}--></p>
+		        </div>
+		    </li>
+		<!--{/foreach}-->
+		</ul>
+	</div>
+	<div>
+		<form action = '/index/add' method = 'post'>
+		<table>
+		    <tr>
+		        <td>昵称:</td><td><input type="text" name = "nickname" /></td>
+		    </tr>
+		    <tr>
+		        <td>内容:</td><td><textarea name = 'content'></textarea></td>
+		    </tr>
+		    <tr>
+		        <td colspan = 2><input type = 'submit' value = '提交'></td>
+		    </tr>
+		</table>
+		</form>
+	</div>
+	```
+> 采用 `Smarty` 模板引擎，也可以使用内置模板引擎或者其他的模板引擎
+
+5. 运行程序
 
 内置模版引擎语法
 -------
