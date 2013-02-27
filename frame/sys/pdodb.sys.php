@@ -2,7 +2,7 @@
 /**
  * pdo数据库操作类
  *
- * 该类暂未完成 缺少读写分离的支持 多数据库的支持 还有部分需要优化的地方 异常处理有待完善 以及BindValue的封装
+ * 该类暂未完成 BindValue的封装
  * @version LessPHP 1.0
  * @author logbird <logbird@126.com>
  * @license BSD {@link http://www.opensource.org/licenses/bsd-license.php
@@ -10,11 +10,8 @@
 class sys_pdodb {
 
     /*******************************数据库连接配置区域*****************************/
-    private $driver;
-    private $host;
+    private $setting;
     private $dbname;
-    private $user;
-    private $pwd;
     private $charset;
 
     /**
@@ -25,13 +22,28 @@ class sys_pdodb {
     private $debug;
 
     /**
+     * debug信息输入文件，如果为空则 直接输出到页面中 debug 为 True 时生效
+     *
+     * @var string
+     */
+    private $debugFile = '';
+
+    /**
      * 是否提示MySQL错误 关闭该选项后 如果出现错误则会 返回FALSE
      *
      * @var Boolean
      */
     private $errReport;
 
-    private $db = null;
+    /**
+     * 是否已经开启事务
+     *
+     * @var Boolean
+     */
+    private $isTrans = false;
+
+    private $db = array();
+    private $curdb = "master";
     private $dns = '';
     private $driverOpt = array();
 
@@ -45,29 +57,38 @@ class sys_pdodb {
      */
     public function __construct($config, $debug = false, $errReport = true)
     {
-        if(empty($config))
-            throw new exception();
 
-        //设置 DSN
-        if(isset($config['dsn']))
+        if(empty($config))
+            $this->halt("配置文件传入有误");
+        if(!isset($config['master']) && $config['master'])
+            $this->halt("请至少传入一个master库的配置信息");
+
+        $setting = array();
+        $setting['master'] = $config['master'];
+        $setting['slave'] = isset($config['slave']) ? $config['slave'] : array();
+
+        //设置主库DSN串
+        $setting['master']['dsn'] = $this->_getDSN($config['master']['host'], $config['master']['port'], $config['master']['dbname']);
+        //设置从库DSN串
+        if(!empty($setting['slave']) && is_array($setting['slave']))
         {
-            $this->dsn = $config['dsn'];
-        }else
-        {
-            if(!isset($config['host']) || !isset($config['dbname']))
-                throw new exception();
-            $this->host = $config['host'];
-            $this->dbname = $config['dbname'];
-            $this->driver = isset($config['driver']) ? $config['driver'] : 'mysql';
-            $dsn = "%s:host=%s;dbname=%s";
-            $this->dsn = sprintf($dsn, $this->driver, $this->host, $this->dbname);
+            $slave = $setting['slave'];
+            if(!isset($slave['host']) || !isset($slave['uname']) || !isset($slave['upwd']))
+            {
+                $slave = array_rand($setting['slave']);
+            }
+            $setting['slave']['dsn'] = $this->_getDSN($config['slave']['host'], $config['slave']['port'], $config['slave']['dbname']);
         }
 
-        $this->user = isset($config['user']) ? $config['user'] : '';
-        $this->pwd = isset($config['pwd']) ? $config['pwd'] : '';
+        //设置编码
         $this->charset = isset($config['charset']) ? $config['charset'] : 'utf8';
+
+        //PDO选项
         if(isset($config['driverOpt']))
-            $this->driverOpt = $config['driverOpt'];
+            $setting['driverOpt'] = $config['driverOpt'];
+
+        $this->setting = $setting;
+
         $this->debug = $debug;
         $this->errReport = $errReport;
 
@@ -78,42 +99,83 @@ class sys_pdodb {
     }
 
     /**
-     * 连接数据库
+     * 根据配置文件获得DSN串
      *
+     * @param Array $config
+     * @param String $dbname
      * @return void
      */
-    private function _connect()
+    private function _getDSN($host, $port, $dbname)
     {
-        if($this->db != null)
+        $dsn = "%s:host=%s;port=%s;dbname=%s";
+        $dsn = sprintf($dsn, 'mysql', $host, $port, $dbname);
+        return $dsn;
+    }
+
+    /**
+     * 连接数据库
+     *
+     * @param String $change 选择主从数据库 master/slave 默认为master
+     * @return void
+     */
+    private function _connect($change)
+    {
+        if(empty($this->setting['slave']))
         {
-            return $this->db;
+            $linkInfo = $this->setting['master'];
+        }else
+        {
+            $linkInfo = $this->setting[$change];
         }
-        $this->db = new PDO($this->dsn, $this->user, $this->pwd, $this->driverOpt);
-        $this->db->exec("SET NAMES " . $this->charset);
-        return $this->db;
+        if(isset($this->db[$change]) && $this->db[$change] != null)
+        {
+            $this->debug("使用缓存连接".$change."库");
+            return $this->db[$change];
+        }
+
+        $this->db[$change] = new PDO($linkInfo['dsn'], $linkInfo['uname'], $linkInfo['upwd'], $this->driverOpt);
+        if(!$this->db[$change])
+            $this->halt("数据库连接失败！");
+
+        $this->debug("连接".$change."库成功，连接信息：".json_encode($linkInfo));
+        $this->debug("PDO配置信息：".json_encode($this->driverOpt));
+
+        $this->db[$change]->exec("SET NAMES " . $this->charset);
+        return $this->db[$change];
     }
 
     /**
      * 获取pdo对象
      *
+     * @param String $change 选择主从数据库 master/slave 默认为master
      * @return void
      */
-    public function db()
+    public function db($change = 'master')
     {
-        return $this->_connect();
+        $this->curdb = $change;
+        return $this->_connect($change);
     }
 
     /**
      * query执行
      *
      * @param String $sql
+     * @param String $change 选择主从数据库 master/slave 默认为master
      * @return void
      */
-    private function _query($sql)
+    private function _query($sql, $change = 'master')
     {
         if(empty($sql))
-                throw new exception();
-        $stmt = $this->db()->query($sql);
+            $this->halt("请传入正确的SQL语句");
+
+        //测试执行时间
+        $runTime = microtime(true);
+
+        $stmt = $this->db($change)->query($sql);
+        if(!$stmt)
+            $this->halt("SQL语句执行失败：".$sql);
+
+        $this->debug("从".$change."库执行SQL：".htmlspecialchars($sql) . "&nbsp;执行结果:".(!$stmt?'Failed':'OK') . "执行时间:".(microtime(true)-$runTime));
         return $stmt;
     }
 
@@ -131,11 +193,14 @@ class sys_pdodb {
      * 获取全部数据
      *
      * @param String $sql
+     * @param String $change 选择主从数据库 master/slave 默认为slave
      * @return void
      */
-    public function getAll($sql)
+    public function getAll($sql, $change = 'slave')
     {
-        $stmt = $this->_query($sql);
+        $stmt = $this->_query($sql, $change);
+        if(!$stmt)
+            return false;
         $r = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $r;
     }
@@ -144,11 +209,14 @@ class sys_pdodb {
      * 获取一行数据
      *
      * @param String $sql
+     * @param String $change 选择主从数据库 master/slave 默认为slave
      * @return void
      */
-    public function getRow($sql)
+    public function getRow($sql, $change = 'slave')
     {
-        $stmt = $this->_query($sql);
+        $stmt = $this->_query($sql, $change);
+        if(!$stmt)
+            return false;
         $r = $stmt->fetch(PDO::FETCH_ASSOC);
         return $r;
     }
@@ -158,11 +226,14 @@ class sys_pdodb {
      *
      * @param String $sql
      * @param String $key
+     * @param String $change 选择主从数据库 master/slave 默认为slave
      * @return void
      */
-    public function getOne($sql, $key)
+    public function getOne($sql, $key, $change = 'slave')
     {
-        $stmt = $this->_query($sql);
+        $stmt = $this->_query($sql, $change);
+        if(!$stmt)
+            return false;
         $r = $stmt->fetch(PDO::FETCH_ASSOC);
         $r = isset($r[$key]) ? $r[$key] : false;
         return $r;
@@ -180,7 +251,6 @@ class sys_pdodb {
         $sql = 'INSERT INTO `'.$table.'`';
 		$cols = '';
 		$values = '';
-		//$cols = '`'.implode('`,`', array_keys((array)$arr)).'`';
 		foreach($arr as $k=>$v)
 		{
 			$cols[] = '`'.$k.'`';
@@ -188,10 +258,13 @@ class sys_pdodb {
 		}
 		$sql .= '('.implode(',', $cols).') values('.implode(',',$values).')';	
 
-		$stmt = $this->_query($sql);
+		$stmt = $this->_query($sql, 'master');
+        if(!$stmt)
+            return false;
 		$last_id = $this->get_lastid();
 		if($last_id != 0)
 		{
+            $this->debug("输入写入成功，返回主健为：".$last_id);
 			return $last_id;
 		}
 		else
@@ -200,6 +273,13 @@ class sys_pdodb {
 		}
     }
 
+    /**
+     * 批量插入数据
+     *
+     * @param Array $batch
+     * @param String $table
+     * @return void
+     */
     public function addBatch($batch, $table)
     {
         $sql = 'INSERT INTO `'.$table.'`';
@@ -210,11 +290,23 @@ class sys_pdodb {
 		    $values[] = "('".implode("','", array_values((array)$row))."')";
 		}
 		$sql .= implode(',', $values);
-		$stmt = $this->_query($sql);
-        return $stmt->rowCount();
+		$stmt = $this->_query($sql, 'master');
+        if(!$stmt)
+            return false;
+        $rowCount = $stmt->rowCount();
+        $this->debug("批量插入影响行数为：".$rowCount);
+        return $rowCount;
     }
 
-    public function edit($arr, $table, $where ='')
+    /**
+     * 编辑数据
+     *
+     * @param Array $arr
+     * @param String $table
+     * @param String $where
+     * @return void
+     */
+    public function update($arr, $table, $where ='')
     {
         if(empty($arr) || empty($table))
 		{
@@ -233,12 +325,21 @@ class sys_pdodb {
 			$values[] = $val;
 		}
 		$sql .= implode(',', $values).' WHERE ' . $where;
-		$res = $this->query($sql);
-        $stmt = $this->_query($sql);
-        return $stmt->rowCount();
+        $stmt = $this->_query($sql, 'master');
+        if(!$stmt)
+            return false;
+        $rowCount = $stmt->rowCount();
+        $this->debug("更新数据影响行数为：".$rowCount);
+        return $rowCount;
     }
 
-    //关于事务方面建议使用这个函数
+    /**
+     * 关于事务方面建议使用这个函数
+     *
+     * @param mixed $callback 回调函数 如果 该回调是某个类的方法 则传入 array($object, $methodName)
+     * @param Array $args 回调函数的参数
+     * @return void
+     */
     public function transaction($callback, $args = array())
     {
         $this->startTrans();
@@ -252,28 +353,65 @@ class sys_pdodb {
             {
                 $callback($args);
             }
+            return true;
         }catch(Exception $ce)
         {
             $this->rollbackTrans();
+            return false;
         }
         $this->commitTrans();
     }
 
+    /**
+     * 开始事务
+     *
+     * @return void
+     */
     public function startTrans()
     {
-        $this->db()->beginTransaction();
+        if(!$this->isTrans)
+        {
+            $this->debug("-------------事务开始-------------");
+            $this->db()->beginTransaction();
+            $this->isTrans = true;
+        }
     }
 
+    /**
+     * 回滚事务
+     *
+     * @return void
+     */
     public function rollbackTrans()
     {
-        $this->db()->rollBack();
+        if($this->isTrans)
+        {
+            $this->debug("-------------事务回滚-------------");
+            $this->db()->rollBack();
+            $this->isTrans = false;
+        }
     }
 
+    /**
+     * 提交事务
+     *
+     * @return void
+     */
     public function commitTrans()
     {
-        $this->db()->commit();
+        if($this->isTrans)
+        {
+            $this->debug("-------------事务提交-------------");
+            $this->db()->commit();
+            $this->isTrans = false;
+        }
     }
 
+    /**
+     * 获取当前数据库所有表名
+     *
+     * @return void
+     */
     public function getTableList()
     {
         $sql = "SHOW TABLES";
@@ -285,6 +423,13 @@ class sys_pdodb {
         return $table;
     }
 
+    /**
+     * 获取某个表的字段的信息
+     *
+     * @param String $table
+     * @param String $dbname
+     * @return void
+     */
     public function getCols($table, $dbname = '')
     {
         $dbname = empty($dbname) ? $this->dbname : $dbname;
@@ -298,16 +443,123 @@ class sys_pdodb {
         return $cols;
     }
 
-    public function setAttr($attr, $value)
+    /**
+     * 设置PDO属性
+     *
+     * @param String $attr
+     * @param String $value
+     * @param String $change 选择主从数据库 master/slave 默认为master
+     * @return void
+     */
+    public function setAttr($attr, $value, $change = 'master')
     {
-        $this->db()->setAttribute($attr, $value);
+        $this->debug("设置PDO属性:".$attr." 值:".$value);
+        $this->db($change)->setAttribute($attr, $value);
     }
 
-    public function getAttr($attr)
+    /**
+     * 获取PDO属性值
+     *
+     * @param String $attr
+     * @param String $change 选择主从数据库 master/slave 默认为master
+     * @return void
+     */
+    public function getAttr($attr, $change = 'master')
     {
-        $this->db()->getAttribute($attr);
+        $this->db($change)->getAttribute($attr);
     }
 
+    /**
+     * 释放调所有MySQL链接
+     *
+     * @param String $change 选择主从数据库 master/slave 默认为master
+     * @return void
+     */
+    public function free($change = '')
+    {
+        if($change == '')
+        {
+            foreach($this->db as $k => $v)
+            {
+                $this->debug("释放".$k."库连接");
+                $this->db[$k] = NULL;
+            }
+            $this->db = array();
+        }
+        if(isset($this->db[$change]))
+        {
+            $this->db[$change] = NULL;
+            $this->debug("释放".$change."库连接");
+        }
+    }
+
+	/**
+     * 打印错误信息
+	 *
+	 * @param String $msg
+	 * @access public
+	 * @return void
+	 */
+	private function halt($msg)
+	{
+        if(!$this->errReport)return false;
+        try
+        {
+		    throw new sys_exception($msg);
+        }catch(sys_exception $ce)
+        {
+            $ce->showMsg();
+        }
+	}
+
+    /**
+     * 输出Debug信息 如果配置了 debugFile则输出在debugFile 文件中
+     *
+     * @param String $msg
+     * @return void
+     */
+    private function debug($msg)
+    {
+        if(!$this->debug)
+            return false;
+        if(!empty($this->debugFile))
+        {
+            if(@file_put_contents($this->debugFile, $msg."\r\n", FILE_APPEND) <= 0)
+            {
+                echo $this->debugFile." 无写权限，写入日志失败<br>";
+            }
+        }else
+        {
+            echo $msg, "<br>";
+        }
+    }
+
+    /**
+     * 设置是否开启debug
+     *
+     * @param Boolean $debug
+     * @param String $debugFile 如果 不需要输入到文件中 则传入 空字符串
+     * @return void
+     */
+    public function setDebug($debug = true, $debugFile = false)
+    {
+        $this->debug = $debug;
+        if($debugFile !== false)
+        {
+            $this->debugFile = $debugFile;
+        }
+    }
+
+    /**
+     * 垃圾回收
+     *
+     * @access protected
+     * @return void
+     */
+    function __destruct()
+    {
+        $this->free();
+    }
 
 
 

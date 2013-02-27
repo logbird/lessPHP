@@ -1,6 +1,6 @@
 <?php
 
-//WHBLOG 根目录
+//LESS_ROOT 根目录
 define ('LESS_ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 //运行时间
 define('_RUNTIME', microtime(true));

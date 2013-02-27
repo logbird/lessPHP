@@ -1,6 +1,6 @@
 <?php
 /**
- * controller控制类
+ * model基类
  */
 abstract class sys_model
 {
@@ -28,6 +28,7 @@ abstract class sys_model
 		if(!$this->db)
 		{
 			$config = sys_config::Get('database');
+            /*
 			$host = $config['master']['host'];		//mysql 主机
 			$dbname = $config['master']['dbname'];	//mysql 数据库名
 			$uname = $config['master']['uname'];	//mysql 用户名
@@ -36,6 +37,8 @@ abstract class sys_model
 			$prifix = $config['master']['prifix'];	//mysql 表前缀
 			$this->prifix = $prifix;
 			$this->db = new sys_database($host,$uname,$upwd,$dbname,$encode,$config['debug'], $config['errReport']);
+            */
+            $this->db = new sys_pdodb($config, $config['debug'], $config['errReport']);
 		}
 		return $this->db;
 	}

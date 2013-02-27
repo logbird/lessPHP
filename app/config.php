@@ -51,12 +51,13 @@ $config['plugin'] = array(
 
 //mysql设置
 $config['database']['master']['host'] = 'localhost';    //mysql 主机
-$config['database']['master']['dbname'] = 'testMsg';	    //mysql 数据库名
+$config['database']['master']['port'] = '3306';			//mysql 表前缀
+$config['database']['master']['dbname'] = 'testMsg';	//mysql 数据库名
 $config['database']['master']['uname'] = 'root';		//mysql 用户名
 $config['database']['master']['upwd'] = '123';			//mysql 密码
-$config['database']['master']['encode'] = 'utf8';		//mysql 编码
-$config['database']['master']['prifix'] = '';			//mysql 表前缀
+$config['database']['master']['charset'] = 'utf8';		//mysql 编码
 $config['database']['debug'] = false;			        //mysql 是否开始调试模式
+$config['database']['debugFile'] = APP.'/files/sql.test';//mysql 该字段不为空字符串的话 则将调试信息输出到文件中
 $config['database']['errReport'] = true;			    //mysql 是否显示sql语句错误
 
 
