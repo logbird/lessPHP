@@ -55,6 +55,12 @@ class sys_router
 		return true;
 	}
 
+    /**
+     * 执行相应controller
+     *
+     * @access private
+     * @return void
+     */
 	private function runController()
 	{
 		//定义控制器
@@ -117,7 +123,7 @@ class sys_router
 		{
             if(isset($_SERVER['argv']))
 			{
-                $path = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : $_SERVER['PHP_SELF'];
+                $path = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : '/';
             }else
 			{
                 $path = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
@@ -178,6 +184,7 @@ class sys_router
 				$v = explode('=', $v);
 				$k = $v[0];
 				$v = $v[1];
+                //改为 parsestr
 				$_GET[$k] = $_REQUEST[$k] = $v;
 			}
 		}
