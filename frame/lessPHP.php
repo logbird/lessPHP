@@ -10,7 +10,7 @@ if(file_exists(INIT))
     require_once(INIT);
 } else
 {
-	echo "配置文件不存在，复制框架目录的config_default.php，并重命名为config.php到您的app目录下.";
+	echo "初始化文件不存在，复制框架目录的init_default.php，并重命名为init.php到您的app目录下.";
 	exit;
 }
 

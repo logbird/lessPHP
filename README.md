@@ -5,7 +5,7 @@ lessPHP是一个基于MVC模型构建的PHP5框架，它的主要特点就是轻
 **主要功能特点**
 
 1. 基于MVC模型构建
-2. 多层controller 和 model
+2. 在controller 和 model 中间 加入module层，用于提高扩展性
 3. 高扩展性，核心类库允许通过继承的方式尽心扩展
 4. 引入插件机制，您可以自由的使用任何类库，无任何限制例如：Smarty、PHPMailer 等
 5. 自定义URL
@@ -20,5 +20,4 @@ lessPHP是一个基于MVC模型构建的PHP5框架，它的主要特点就是轻
 **正在完善的功能**
 
 1. 使用 runtime 方式 缓存类库
-2. IMVC 的规划以及实现 在M 与 C之间增加I(Interface)层
-3. LIB库的整理
+2. LIB库的整理
