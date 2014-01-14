@@ -13,6 +13,7 @@ $config = array();
 $config['controller_dir'] = APP . 'controller';
 $config['model_dir'] = APP . 'model';
 $config['plugin_dir'] = APP . 'plugin';
+$config['module_dir'] = APP . 'module';
 $config['extends_dir'] = APP . 'extends';
 
 //模版资源路径

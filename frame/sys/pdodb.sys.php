@@ -202,6 +202,7 @@ class sys_pdodb {
         if(!$stmt)
             return false;
         $r = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$r = is_array($r) ? $r : array();
         return $r;
     }
 
@@ -218,6 +219,7 @@ class sys_pdodb {
         if(!$stmt)
             return false;
         $r = $stmt->fetch(PDO::FETCH_ASSOC);
+		$r = is_array($r) ? $r : array();
         return $r;
     }
 
@@ -266,6 +268,39 @@ class sys_pdodb {
 		{
             $this->debug("输入写入成功，返回主健为：".$last_id);
 			return $last_id;
+		}
+		else
+		{
+			return false;
+		}
+    }
+
+	/**
+     * Replace一条数据
+     *
+     * @param Array $arr
+     * @param String $table
+     * @return void
+     */
+    public function replace($arr, $table)
+    {
+        $sql = 'REPLACE INTO `'.$table.'`';
+		$cols = '';
+		$values = '';
+		foreach($arr as $k=>$v)
+		{
+			$cols[] = '`'.$k.'`';
+			$values[] = "'".$v."'";
+		}
+		$sql .= '('.implode(',', $cols).') values('.implode(',',$values).')';	
+
+		$stmt = $this->_query($sql, 'master');
+        if(!$stmt)
+            return false;
+		if($last_id != 0)
+		{
+            $this->debug("输入写入成功，返回主健为：" . $last_id);
+			return true;
 		}
 		else
 		{

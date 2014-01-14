@@ -23,7 +23,7 @@ abstract class sys_model
 
 	}
 
-	function db()
+	public function db()
 	{
 		if(!$this->db)
 		{
@@ -41,6 +41,21 @@ abstract class sys_model
             $this->db = new sys_pdodb($config, $config['debug'], $config['errReport']);
 		}
 		return $this->db;
+	}
+
+	public function startTrans()
+	{
+		$this->db()->startTrans();
+	}
+
+	public function rollbackTrans()
+	{
+		$this->db()->rollbackTrans();
+	}
+
+	public function commitTrans()
+	{
+		$this->db()->commitTrans();
 	}
 }
 ?>

@@ -25,10 +25,10 @@ class sys_config
      * @access public
      * @return void
      */
-	static function Get($key)
+	static function Get($key, $confName = '_main')
 	{
-		$config = self::$config;
-		$config = isset($config[$key]) ? $GLOBALS['config'][$key] : '';
+		$config = self::$config[$confName];
+		$config = isset($config[$key]) ? $config[$key] : '';
 		return $config;
 	}
 
@@ -41,9 +41,9 @@ class sys_config
      * @access public
      * @return void
      */
-    static function Set($key, $value)
+    static function Set($key, $value, $confName = '_main')
 	{
-		self::$config[$key] = $value;
+		self::$config[$confName][$key] = $value;
 	}
 
     /**
@@ -54,9 +54,9 @@ class sys_config
      * @access public
      * @return void
      */
-    static function Init($config)
+    static function Init($config, $confName = '_main')
     {
-        self::$config = $config;
+        self::$config[$confName] = $config;
     }
 }
 ?>

@@ -148,7 +148,7 @@ class sys_router
         $path = str_ireplace('index.php', '', $path);
         //for subdirectory
         $t = parse_url(URL);
-        $path = str_replace($t['path'], '/', $path);
+        $path = isset($path['path']) ? $path['path'] : '/';
 		$path = ltrim($path, '/');
 		$path = parse_url($path);
 		$path = $path['path'];

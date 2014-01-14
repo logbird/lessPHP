@@ -91,8 +91,10 @@ function __autoload($class)
 	}elseif(file_exists($class.'.php'))
 	{
 		$class .= '.php';
-	}else
+	}elseif(file_exists(sys_config::Get('module_dir') .DIRECTORY_SEPARATOR. $class.'.php'))
 	{
+		$class = sys_config::Get('module_dir') . DIRECTORY_SEPARATOR . $class . '.php';
+	} else {
 		$class = sys_loader::getPlugin($class);
 	}
 	require_once $class;
