@@ -1,20 +1,14 @@
 <?php
 !defined('LESS_ROOT') && exit('access deined!');
-header("Content-type:text/html;charset=utf-8");
-header("Cache-Control:no-cache,must-revalidate");
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
-
-@date_default_timezone_set("PRC");
 
 //定义 自动加载 防止与 smarty等类库冲突
 spl_autoload_register('__autoload');
 //**********************************加载初始化文件************************************
 //加载程序配置文件
-if(file_exists(CONFIG))
+if(file_exists(INIT))
 {
-	require_once(CONFIG);
-    sys_config::Init($config);
-}else
+    require_once(INIT);
+} else
 {
 	echo "配置文件不存在，复制框架目录的config_default.php，并重命名为config.php到您的app目录下.";
 	exit;

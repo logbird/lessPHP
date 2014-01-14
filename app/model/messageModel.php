@@ -1,6 +1,6 @@
 <?PHP
 
-class messageModel extends sys_model
+class messageModel extends My_Model
 {
 
     private $_table = 'message';

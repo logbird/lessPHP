@@ -33,10 +33,10 @@ define('APP', LESS_ROOT . ltrim($_APP_PATH, '/') . DIRECTORY_SEPARATOR);
 define('SYSTEM', LESS_ROOT . ltrim($_SYSTEM_PATH, '/') . DIRECTORY_SEPARATOR);
 
 //定义配置文件路径
-define("CONFIG", APP . 'config.php');
+define("INIT", APP . 'init.php');
 
 //加载框架初始化文件
-require(SYSTEM . 'init.php');
+require(SYSTEM . 'lessPHP.php');
 
 //加载控制器
 new sys_router();

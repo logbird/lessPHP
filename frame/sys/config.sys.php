@@ -25,11 +25,15 @@ class sys_config
      * @access public
      * @return void
      */
-	static function Get($key, $confName = '_main')
+	static function Get($key, $confName = 'main')
 	{
-		$config = self::$config[$confName];
-		$config = isset($config[$key]) ? $config[$key] : '';
-		return $config;
+        if (self::Load($confName)) {
+            $config = self::$config[$confName];
+            $config = isset($config[$key]) ? $config[$key] : '';
+            return $config;
+        } else {
+            return False;
+        }
 	}
 
     /**
@@ -41,9 +45,11 @@ class sys_config
      * @access public
      * @return void
      */
-    static function Set($key, $value, $confName = '_main')
+    static function Set($key, $value, $confName = 'main')
 	{
-		self::$config[$confName][$key] = $value;
+        if (self::Load($confName)) {
+		    self::$config[$confName][$key] = $value;
+        }
 	}
 
     /**
@@ -54,9 +60,23 @@ class sys_config
      * @access public
      * @return void
      */
-    static function Init($config, $confName = '_main')
+    static function Init($config, $confName = 'main')
     {
         self::$config[$confName] = $config;
+    }
+
+    static function Load($confName)
+    {
+        if (!isset(self::$config[$confName])) {
+            $class = CONFIG_DIR . $confName . '.php';
+            if (file_exists($class)) {
+                self::$config[$confName] = require($class);
+                return True;
+            } else {
+                return False;
+            }
+        }
+        return True;
     }
 }
 ?>

@@ -36,6 +36,7 @@ class My_Controller extends sys_controller
 		$this->tpl->left_delimiter = "<!--{";
 		$this->tpl->right_delimiter = "}-->";
 	}
+
 }
 
 

@@ -146,9 +146,6 @@ class sys_router
         $path = $r[0];
         //for iis6
         $path = str_ireplace('index.php', '', $path);
-        //for subdirectory
-        $t = parse_url(URL);
-        $path = isset($path['path']) ? $path['path'] : '/';
 		$path = ltrim($path, '/');
 		$path = parse_url($path);
 		$path = $path['path'];
