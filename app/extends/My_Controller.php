@@ -21,6 +21,7 @@ class My_Controller extends sys_controller
 
     public function assign($args, $value)
     {
+        $this->tpl->assign("REC", REC);
         $this->tpl->assign($args, $value);
     }
 
@@ -33,6 +34,7 @@ class My_Controller extends sys_controller
 		$this->tpl = new Smarty();
 		$this->tpl->template_dir = sys_config::Get('templates_dir');
 		$this->tpl->compile_dir = sys_config::Get('comple_dir');
+		$this->tpl->caching = False;
 		$this->tpl->left_delimiter = "<!--{";
 		$this->tpl->right_delimiter = "}-->";
 	}

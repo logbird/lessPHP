@@ -2,7 +2,7 @@
 class My_Model extends sys_model
 {
 	public static $_redis;
-	protected $db = '';
+	protected $db = array();
 
 	public function __construct()
 	{
@@ -18,14 +18,21 @@ class My_Model extends sys_model
 		return self::$_redis;
 	}
 
-	public function db()
+    /**
+     * 要链接的数据库
+     *
+     * @param mixed $db
+     * @access public
+     * @return void
+     */
+	public function db($db = 'main')
 	{
-		if(!$this->db)
+		if(!isset($this->db[$db]) || !$this->db[$db])
 		{
-			$config = sys_config::Get('database');
-            $this->db = new sys_pdodb($config, $config['debug'], $config['errReport']);
+			$config = sys_config::Get($db, 'db');
+            $this->db[$db] = new sys_pdodb($config, $config['debug'], $config['errReport']);
 		}
-		return $this->db;
+		return $this->db[$db];
 	}
 
 	public function startTrans()
