@@ -21,3 +21,6 @@ lessPHP是一个基于MVC模型构建的PHP5框架，它的主要特点就是轻
 
 1. 使用 runtime 方式 缓存类库
 2. LIB库的整理
+
+
+**更多请查看** https://github.com/logbird/lessPHP

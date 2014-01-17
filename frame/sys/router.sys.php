@@ -255,10 +255,10 @@ class sys_router
 		$action = $a . 'Action';
 
         if (empty($c)) {
-			$this->notFound("Script invalid!");
+            $this->cliHelper();
         }
         if (empty($a)) {
-			$this->notFound("Action invalid!");
+            $this->cliHelper($c, $controllerClass);
         }
 
 		//定义控制器文件
@@ -268,12 +268,12 @@ class sys_router
 			require_once($controllerFile);
 			if(!class_exists($controllerClass, false))
 			{
-				$this->notFound("Class {$controllerClass} is not found!");
+                $this->cliHelper();
 			}
 			$obj = new $controllerClass();
 			if(!method_exists($obj, $action))
 			{
-				$this->notFound("Action {$a} is not found!");
+                $this->cliHelper($c, $controllerClass);
 			}
             //运用反射机制 设置 执行脚本的参数
             $method = new ReflectionMethod($obj, $action);
@@ -347,6 +347,100 @@ class sys_router
             }
         }
         return $o;
+    }
+
+    /**
+     * Cli模式下的提示工具 提示当前脚本信息 和 可执行的方法名
+     *
+     * @access public
+     * @return void
+     */
+    private function cliHelper($scriptName = '', $className = '')
+    {
+        if (empty($scriptName) || empty($className)) {
+            $scripts = $this->getCliScriptList();
+            $scripts = implode(" - ", $scripts);
+            $help =<<<HELP
+\nUsage: ./lcli <module-name> <action-name> [--args value...]
+
+The following module-name are available:
+Modules:
+ - $scripts
+HELP;
+        } else {
+            $methods = $this->getMethodsList($scriptName, $className);
+            $help =<<<HELP
+\nUsage: ./lcli $scriptName <action-name> [--args value...]
+The following action-name are available:
+Actions:\n
+HELP;
+            foreach ($methods as $method => $parameters) {
+                $help .= " - " . $method . "\t";
+                foreach ($parameters as $argsName =>  $v) {
+                    $help .= " --{$argsName} value";
+                }
+            }
+        }
+
+        $help .= "\n\n\n";
+        echo $help;
+        exit;
+    }
+
+    /**
+     * 获取方法列表
+     *
+     * @param mixed $scriptName
+     * @param mixed $className
+     * @access public
+     * @return void
+     */
+    private function getMethodsList($scriptName, $className)
+    {
+        require_once($this->_appPath . $scriptName . 'Controller.php');
+        $ref = new ReflectionClass($className);
+        $list = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
+        $methods = array();
+        foreach ($list as $k => $v) {
+            if ($v->class != $className || !preg_match("/^.*Action$/i", $v->name))
+            {
+                continue;
+            }
+            $parameters = $v->getParameters();
+            $args = array();
+            foreach ($parameters as $pk => $pv)
+            {
+                $argsName = $pv->getName();
+                $argsValue = '';
+                if ($pv->isOptional()){
+                    //设置默认值
+                    $argsValue = $pv->getDefaultValue();
+                }
+                $args[$argsName] = $argsValue;
+            }
+            $method = str_replace("Action", "", $v->name);
+            $methods[$method] = $args;
+        }
+        return $methods;
+    }
+
+    /**
+     * 获取可执行的cli脚本列表
+     *
+     * @access public
+     * @return void
+     */
+    private function getCliScriptList() {
+        $list = array();
+        $handle = opendir($this->_appPath);
+        while ($file = readdir($handle)) {
+            if ($file == '.' || $file == '..' || !preg_match("/^.*Controller\.php$/i", $file)) {
+                continue;
+            }
+            $list[] = str_replace("Controller.php", "", $file);
+        }
+        closedir($handle);
+        return $list;
     }
 
 	/**
