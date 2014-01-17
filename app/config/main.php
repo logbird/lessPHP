@@ -45,21 +45,4 @@ $config['plugin'] = array(
     'plugin_Redis' => array('Redis.php', false),
 );
 
-//mysql设置
-$config['database']['master']['host'] = '10.108.78.52';    //mysql 主机
-$config['database']['master']['port'] = 3301;			//mysql 表前缀
-$config['database']['master']['dbname'] = 'vip_ad_system';	//mysql 数据库名
-$config['database']['master']['uname'] = 'test_vip';		//mysql 用户名
-$config['database']['master']['upwd'] = 'test_vip@360';			//mysql 密码
-$config['database']['master']['charset'] = 'utf8';		//mysql 编码
-$config['database']['debug'] = false;			        //mysql 是否开始调试模式
-$config['database']['debugFile'] = '';//mysql 该字段不为空字符串的话 则将调试信息输出到文件中
-$config['database']['errReport'] = true;			    //mysql 是否显示sql语句错误
-
-
-$config['redis'] = array(
-	'host' => 'gamec.todeer.com',
-	'port' => '6379',
-);
-
 return $config;
