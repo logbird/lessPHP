@@ -141,8 +141,16 @@ class sys_router
 	private function parseUrl($level = 1)
 	{
 		$param = explode('/', $this->_urlPath);
+        //进入深层递归 来处理子目录
+        if($level > 1)
+        {
+            if (is_dir($this->_appPath . $param[0])) {
+                $this->_appPath .= array_shift($param) . '/';
+                $this->_urlPath = implode('/', $param);
+            }
+        }
 		//判断是否到目录底部
-		if($level > count($param))
+		if($level > 3)
 		{
 			return false;
 		}
@@ -195,7 +203,7 @@ class sys_router
 		}
 		else if($this->parseUrl($this->_level+1))
 		{
-			$this->runController();
+			$this->runHttpController();
 		}else
 		{
 			$this->notFound("Controller {$controllerFile} is not found!");
