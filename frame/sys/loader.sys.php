@@ -127,15 +127,9 @@ class sys_loader
 	 */
 	public static function getPlugin($className)
 	{
-        try
+        if(!isset(self::$_plugin[$className]))
         {
-            if(!isset(self::$_plugin[$className]))
-            {
-                throw new sys_exception($className . ' Not Registered!');
-            }
-        }catch(sys_exception $ce)
-        {
-            $ce->showMsg();
+            return False;
         }
 		$plugin = self::$_plugin[$className];
 		return $plugin['path'];

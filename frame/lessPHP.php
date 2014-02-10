@@ -91,5 +91,7 @@ function __autoload($class)
 	} else {
 		$class = sys_loader::getPlugin($class);
 	}
-	require_once $class;
+    if($class && file_exists($class)) {
+	    require_once $class;
+    }
 }
