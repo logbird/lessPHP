@@ -1,5 +1,14 @@
 <?php
-
+/**
+ * 异常处理类
+ * 
+ * @uses Exception
+ * @package 
+ * @version $id$
+ * @copyright @copyright 2005-2012 360.CN All Rights Reserved.
+ * @author logbird <logbird@126.com> 
+ * @license 
+ */
 class sys_exception extends Exception {
   
     private $_template = array();
@@ -81,13 +90,26 @@ class sys_exception extends Exception {
         return $code;
     }
 
+    /**
+     * 输出错误信息并 终止程序
+     *
+     * @access public
+     * @return void
+     */
     public function showMsg()
     {
 
         $msg = $this->getMsg();
         echo $msg;
+        exit;
     }
 
+    /**
+     * 获取错误提示信息
+     *
+     * @access public
+     * @return void
+     */
     public function getMsg()
     {
         $stace = $this->getTrace();
@@ -120,6 +142,16 @@ class sys_exception extends Exception {
         return $msg;
     }
 
+
+    /**
+     * 获取抛出异常的源代码
+     *
+     * @param mixed $file
+     * @param mixed $line
+     * @param mixed $ext
+     * @access private
+     * @return void
+     */
     private function getErrSource($file, $line, $ext)
     {
         if(!$file)
