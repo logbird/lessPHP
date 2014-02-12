@@ -371,7 +371,7 @@ class sys_router
     {
         if (empty($scriptName) || empty($className)) {
             $scripts = $this->getCliScriptList();
-            $scripts = implode(" - ", $scripts);
+            $scripts = implode("\n - ", $scripts);
             $help =<<<HELP
 \nUsage: ./lcli <module-name> <action-name> [--args value...]
 
