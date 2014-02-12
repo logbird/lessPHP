@@ -252,15 +252,19 @@ class sys_pdodb {
     {
         $sql = 'INSERT INTO `'.$table.'`';
 		$cols = '';
-		$values = '';
+        $binds = array();
 		foreach($arr as $k=>$v)
 		{
 			$cols[] = '`'.$k.'`';
-			$values[] = "'".$v."'";
+            $binds[':'.$k] = $v;
 		}
-		$sql .= '('.implode(',', $cols).') values('.implode(',',$values).')';	
+		$sql .= '('.implode(',', $cols).') values('.implode(',', array_keys($binds)).')';	
 
-		$stmt = $this->_query($sql, 'master');
+        $stmt = $this->db('master')->prepare($sql);
+        foreach ($binds as $k => $v) {
+            $stmt->bindValue($k, $v);
+        }
+        $stmt = $stmt->execute();
         if(!$stmt)
             return false;
 		$last_id = $this->get_lastid();
