@@ -391,6 +391,7 @@ HELP;
                 foreach ($parameters as $argsName =>  $v) {
                     $help .= " --{$argsName} value";
                 }
+                $help .= "\n";
             }
         }
 
