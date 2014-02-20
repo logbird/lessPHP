@@ -5,7 +5,7 @@ define ('LESS_ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 //运行时间
 define('_RUNTIME', microtime(true));
 //定义运行模式
-!defined('IS_CONSOLE') && define(IS_CONSOLE, false);
+!defined('IS_CONSOLE') && define('IS_CONSOLE', false);
 
 
 /*
