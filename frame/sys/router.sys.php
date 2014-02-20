@@ -369,7 +369,7 @@ class sys_router
      */
     private function cliHelper($scriptName = '', $className = '')
     {
-        if (empty($scriptName) || empty($className)) {
+        if (empty($scriptName) || empty($className) || !file_exists($this->_appPath . $scriptName . 'Controller.php')) {
             $scripts = $this->getCliScriptList();
             $scripts = implode("\n - ", $scripts);
             $help =<<<HELP
