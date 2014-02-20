@@ -59,4 +59,3 @@ class xmlLIB
 		return $child;
 	}
 }
-?>

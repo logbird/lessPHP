@@ -161,4 +161,3 @@ class sys_request
 	}
 
 }
-?>

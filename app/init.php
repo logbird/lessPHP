@@ -11,9 +11,3 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 defined('INIT_INCLUDE') && exit('Configruge Duplicates!');
 define('INIT_INCLUDE', true);
 define('CONFIG_DIR', APP.'config/');
-
-
-
-;
-
-?>

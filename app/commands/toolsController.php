@@ -30,7 +30,3 @@ class toolsController extends My_Controller
 	}
 }
 
-
-
-
-

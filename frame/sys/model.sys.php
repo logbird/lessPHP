@@ -19,4 +19,3 @@ abstract class sys_model
 
 	}
 }
-?>

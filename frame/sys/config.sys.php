@@ -79,4 +79,3 @@ class sys_config
         return True;
     }
 }
-?>

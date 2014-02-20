@@ -40,9 +40,3 @@ class My_Controller extends sys_controller
 	}
 
 }
-
-
-
-
-
-?>

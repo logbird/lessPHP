@@ -207,4 +207,3 @@ class sys_templates
 		return preg_replace($pattern, $replace, $string);
 	}
 }
-?>

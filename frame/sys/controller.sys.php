@@ -44,4 +44,3 @@ abstract class sys_controller
 		return sys_loader::loadModel($classPath);
 	}
 }
-?>
