@@ -51,7 +51,10 @@ define('VROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 //站点URL
 if(isset($_SERVER['SERVER_NAME']) && (!isset($argc) || $argc == 0))
 {
-	define('URL', "http://".$_SERVER['SERVER_NAME'].VROOT);
+    $host = empty($_SERVER['SERVER_NAME']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+    $host = $host ? $host : '/';
+	define('URL', "http://".$host.VROOT);
+    unset($host);
 }else
 {
 	define('URL', LESS_ROOT. VROOT);
