@@ -1,5 +1,5 @@
 #!/usr/bin/env php
 <?php
-define(IS_CONSOLE, true);
+define('IS_CONSOLE', true);
 require("index.php");
 
