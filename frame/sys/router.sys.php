@@ -110,11 +110,12 @@ class sys_router
             if($path == trim($k, '/'))
             {
                 $path = $v;
-            }elseif(!preg_match('/^[\/a-zA-Z_0-9]*$/', $k) && @preg_match('/^'.$k.'$/i', $path))
+            }elseif(!preg_match('/^[\/a-zA-Z_0-9]*$/', $k) && @preg_match('/^'.$k.'$/i', '/' . $path))
             {
                 //替换正则
-                $path = preg_replace('/^'.$k.'$/', $v, $path);
+                $path = preg_replace('/^'.$k.'$/', $v, '/' . $path);
             }
+            $path = trim($path, '/');
         }
         $path = parse_url($path);
         //处理http参数
