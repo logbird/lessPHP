@@ -49,7 +49,7 @@ function exceptionHanddle($errno, $errstr)
 define('VROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 
 //站点URL
-if(isset($_SERVER['SERVER_NAME']) && (!isset($argc) || $argc == 0))
+if(isset($_SERVER['SERVER_NAME']) && (!isset($argc) || $argc == 0  || php_sapi_name() != 'cli'))
 {
     $host = empty($_SERVER['SERVER_NAME']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
     $host = $host ? $host : '/';
