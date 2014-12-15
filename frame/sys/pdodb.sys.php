@@ -224,6 +224,24 @@ class sys_pdodb {
     }
 
     /**
+     * delete
+     *
+     * @param mixed $where
+     * @access public
+     * @return void
+     */
+    public function delete($table, $where)
+    {
+        $sql = "DELETE FROM `{$table}` WHERE {$where}";
+    	$stmt = $this->_query($sql, 'master');
+        if(!$stmt)
+            return false;
+        else
+            return True;
+
+    }
+
+    /**
      * 获取一行一列值
      *
      * @param String $sql
