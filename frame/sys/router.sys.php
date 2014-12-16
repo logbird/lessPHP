@@ -110,10 +110,12 @@ class sys_router
             if($path == trim($k, '/'))
             {
                 $path = $v;
+                break;
             }elseif(!preg_match('/^[\/a-zA-Z_0-9]*$/', $k) && @preg_match('/^'.$k.'$/i', '/' . $path))
             {
                 //替换正则
                 $path = preg_replace('/^'.$k.'$/', $v, '/' . $path);
+                break;
             }
             $path = trim($path, '/');
         }
