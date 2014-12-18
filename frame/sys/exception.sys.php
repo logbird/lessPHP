@@ -98,7 +98,7 @@ class sys_exception extends Exception {
      */
     public function showMsg()
     {
-
+        header('HTTP/1.1 500 Internal Server Error'); 
         $msg = $this->getMsg();
         echo $msg;
         exit;
