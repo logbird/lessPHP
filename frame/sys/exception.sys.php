@@ -99,6 +99,9 @@ class sys_exception extends Exception {
     public function showMsg()
     {
         header('HTTP/1.1 500 Internal Server Error'); 
+        if (OnLine) {
+            toolsLIB::Msg("404", '/');
+        }
         $msg = $this->getMsg();
         echo $msg;
         exit;
