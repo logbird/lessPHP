@@ -200,7 +200,7 @@ class sys_router
             {
                 $this->notFound("Class {$controllerClass} is not found!");
             }
-            $obj = new $controllerClass();
+            $obj = new $controllerClass($c, $a);
             if(!method_exists($obj, $action))
             {
                 $this->notFound("Action {$a} is not found!");
