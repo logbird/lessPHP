@@ -7,11 +7,15 @@ class httpLIB
 	/**
 	 * 获取url返回值，curl方法
 	 */
-	public static function curlGet($url, $timeout = 1, $header = array())
+	public static function curlGet($url, $timeout = 1, $header = array(), $referer = '')
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        if ($referer) {
+            curl_setopt($ch, CURLOPT_REFERER, $referer);
+        }
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; rv:30.0) Gecko/20100101 Firefox/30.0');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 		$ret = curl_exec($ch);
