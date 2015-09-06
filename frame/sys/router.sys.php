@@ -161,8 +161,10 @@ class sys_router
             break;
         }
         $c = implode('/', array_slice($param, 0, -2));
-        $class = reset(array_slice($param, -2, -1));
-        $a = reset(array_slice($param, -1));
+        $class = array_slice($param, -2, -1);
+        $a = array_slice($param, -1);
+        $class = $class = !empty($class) ? reset($class) : "";
+        $a = $a = !empty($a) ? reset($a) : "";
         $c .= '/' . $class;
 
         //定义控制器名称
